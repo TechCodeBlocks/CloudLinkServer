@@ -4,7 +4,7 @@ import com.microsoft.signalr.HubConnectionBuilder;
 //This program map will not be changed or uploaded if no new files are detected
 //Message handling:
 //[new_file] -> use uuid provided to download file from blob - get data from cloud sync to add data to local map, get path to dl file to
-//[req_file] -> upload requested uuid to lookup then upload the file.w
+//[req_file] -> upload requested uuid to lookup then upload the file.
 
 public class CloudLinkServer {
     static HubConnection hubConnection;
