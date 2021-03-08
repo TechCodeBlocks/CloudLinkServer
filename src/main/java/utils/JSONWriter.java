@@ -6,11 +6,12 @@ import org.json.simple.JSONObject;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 
 public class JSONWriter {
-    public static void write(HashMap<String, HashMap<String, String>> filesdata){
+    public static void write(List<HashMap<String, String>> filesdata){
         JSONArray fileList = new JSONArray();
-        for (HashMap<String, String> filedata : filesdata.values()){
+        for (HashMap<String, String> filedata : filesdata){
             JSONObject fileDetails = new JSONObject();
             fileDetails.put("uuid", filedata.get("uuid"));
             fileDetails.put("path", filedata.get("path"));
@@ -27,6 +28,7 @@ public class JSONWriter {
         }catch (IOException e){
             e.printStackTrace();
         }
+
 
     }
 }
