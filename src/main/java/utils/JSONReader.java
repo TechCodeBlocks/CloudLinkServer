@@ -29,7 +29,7 @@ public class JSONReader {
 
     private void parseFileData(JSONObject fileData){
         HashMap<String, String> fileDataMap = new HashMap<String, String>();
-        fileDataMap.put("uuid", (String) fileData.get("uuid"));
+        fileDataMap.put("_id", (String) fileData.get("_id"));
         fileDataMap.put("path", (String) fileData.get("path"));
         fileDataMap.put("date-edited", (String) fileData.get("date-edited"));
         fileDataMap.put("online", (String) fileData.get("online"));

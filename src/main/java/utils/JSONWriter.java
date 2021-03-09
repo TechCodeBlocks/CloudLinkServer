@@ -13,7 +13,7 @@ public class JSONWriter {
         JSONArray fileList = new JSONArray();
         for (HashMap<String, String> filedata : filesdata){
             JSONObject fileDetails = new JSONObject();
-            fileDetails.put("uuid", filedata.get("uuid"));
+            fileDetails.put("_id", filedata.get("_id"));
             fileDetails.put("path", filedata.get("path"));
             fileDetails.put("date-edited", filedata.get("date-edited"));
             fileDetails.put("online", filedata.get("online"));
