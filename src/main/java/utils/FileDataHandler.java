@@ -1,5 +1,6 @@
 package utils;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +25,18 @@ public class FileDataHandler {
         }
 
         return mergedList;
+
+    }
+    public static void test(List<HashMap<String, String>> oldList, List<HashMap<String, String>> newList){
+        for(HashMap<String,String> fileItem : newList){
+            if(!oldList.contains(fileItem)){
+                if(LocalDate.parse(fileItem.get("date-edited")).isAfter(LocalDate.now().minusDays(1))){
+                    //add as new item to cloud database - this method is probably better to run then just use the
+                    //new list as the up to date one.
+                }
+            }
+        }
+
 
     }
 }
