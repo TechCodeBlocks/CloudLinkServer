@@ -1,6 +1,7 @@
 import com.microsoft.signalr.HubConnection;
 import com.microsoft.signalr.HubConnectionBuilder;
 import utils.FileCrawler;
+import utils.HTTPClient;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,12 +18,12 @@ public class CloudLinkServer {
     public static void main(String[] args) {
         FileCrawler fileCrawler = new FileCrawler("/Users/sandrarolfe/Documents/servertest");
         List<HashMap<String,String>> filesEmpty = new ArrayList<>();
-        HashMap<String,String> testEntry1 = new HashMap<>();
-        testEntry1.put("path","/Users/sandrarolfe/Documents/servertest/Test1.rtf");
-        filesEmpty.add(testEntry1);
-        HashMap<String,String> testEntry2 = new HashMap<>();
-        testEntry2.put("path","/Users/sandrarolfe/Documents/servertest/test2/.DS_Store");
-        filesEmpty.add(testEntry2);
+//        HashMap<String,String> testEntry1 = new HashMap<>();
+//        testEntry1.put("path","/Users/sandrarolfe/Documents/servertest/Test1.rtf");
+//        filesEmpty.add(testEntry1);
+//        HashMap<String,String> testEntry2 = new HashMap<>();
+//        testEntry2.put("path","/Users/sandrarolfe/Documents/servertest/test2/.DS_Store");
+//        filesEmpty.add(testEntry2);
         List<HashMap<String,String>> files = fileCrawler.crawl(filesEmpty);
         for(HashMap<String,String> file : files){
             System.out.println(file.get("_id"));
@@ -35,5 +36,7 @@ public class CloudLinkServer {
         hubConnection = HubConnectionBuilder.create(url).build();
         hubConnection.start();
         */
+        //HTTPClient.uploadFileData(files.get(1));
+        HTTPClient.deleteFileData("28727e4e-cbe8-4bbc-ab3d-da90d440baaf");
     }
 }
