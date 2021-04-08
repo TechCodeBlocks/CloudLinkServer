@@ -37,6 +37,9 @@ public class CloudLinkServer {
         hubConnection.start();
         */
         //HTTPClient.uploadFileData(files.get(1));
-        HTTPClient.deleteFileData("28727e4e-cbe8-4bbc-ab3d-da90d440baaf");
+        //HTTPClient.deleteFileData("28727e4e-cbe8-4bbc-ab3d-da90d440baaf");
+        System.out.println("using blob storage");
+        HTTPClient.uploadFile(files.get(1));
+        HTTPClient.downloadFile(files.get(1));
     }
 }
