@@ -16,30 +16,37 @@ public class CloudLinkServer {
     static HubConnection hubConnection;
     static String url = "https://cloudlinkmessage.azurewebsites.net/api";
     public static void main(String[] args) {
-        FileCrawler fileCrawler = new FileCrawler("/Users/sandrarolfe/Documents/servertest");
-        List<HashMap<String,String>> filesEmpty = new ArrayList<>();
+//        FileCrawler fileCrawler = new FileCrawler("/Users/sandrarolfe/Documents/servertest");
+//        List<HashMap<String,String>> filesEmpty = new ArrayList<>();
 //        HashMap<String,String> testEntry1 = new HashMap<>();
 //        testEntry1.put("path","/Users/sandrarolfe/Documents/servertest/Test1.rtf");
 //        filesEmpty.add(testEntry1);
 //        HashMap<String,String> testEntry2 = new HashMap<>();
 //        testEntry2.put("path","/Users/sandrarolfe/Documents/servertest/test2/.DS_Store");
 //        filesEmpty.add(testEntry2);
-        List<HashMap<String,String>> files = fileCrawler.crawl(filesEmpty);
-        for(HashMap<String,String> file : files){
-            System.out.println(file.get("_id"));
-            System.out.println(file.get("path"));
-            System.out.println(file.get("date-edited"));
-            System.out.println(file.get("online"));
-        }
-        /*
+//        List<HashMap<String,String>> files = fileCrawler.crawl(filesEmpty);
+//        for(HashMap<String,String> file : files){
+//            System.out.println(file.get("_id"));
+//            System.out.println(file.get("path"));
+//            System.out.println(file.get("date-edited"));
+//            System.out.println(file.get("online"));
+//        }
+/*
         Connect to communications hub
         hubConnection = HubConnectionBuilder.create(url).build();
         hubConnection.start();
         */
         //HTTPClient.uploadFileData(files.get(1));
         //HTTPClient.deleteFileData("28727e4e-cbe8-4bbc-ab3d-da90d440baaf");
-        System.out.println("using blob storage");
-        HTTPClient.uploadFile(files.get(1));
-        HTTPClient.downloadFile(files.get(1));
+//        System.out.println("using blob storage");
+//        HTTPClient.uploadFile(files.get(1));
+//        HTTPClient.downloadFile(files.get(1));
+        HashMap<String, String> test = HTTPClient.getFileData("0923e361-1555-40ee-9407-cfa420708e00");
+        for(String value : test.values()){
+            System.out.println(value);
+        }
+        for(String key: test.keySet()){
+            System.out.println(key);
+        }
     }
 }

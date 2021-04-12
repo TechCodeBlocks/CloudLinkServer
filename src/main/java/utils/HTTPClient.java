@@ -4,11 +4,11 @@ import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.BlobServiceClient;
 import com.azure.storage.blob.BlobServiceClientBuilder;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.simple.JSONObject;
 
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -110,6 +110,51 @@ public class HTTPClient {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public static HashMap<String, String> getFileData(String id){
+        CompletableFuture<HashMap<String, String>> completableFuture = CompletableFuture.supplyAsync(()->{
+            try {
+                URL url = new URL("https://cloudlink.azurewebsites.net/api/get-single-file-data?");
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+                connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+                connection.setRequestProperty("Accept", "application/json");
+                connection.setDoOutput(true);
+                JSONObject body = new JSONObject();
+                body.put("_id", id);
+                DataOutputStream dataOutputStream = new DataOutputStream(connection.getOutputStream());
+                dataOutputStream.write(body.toString().getBytes());
+                dataOutputStream.close();
+                InputStream in = connection.getInputStream();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+                StringBuffer buf = new StringBuffer();
+                String line;
+                while ((line = reader.readLine())!=null) {
+                    buf.append(line);
+                }
+                HashMap<String,String> fileData = new HashMap<>();
+                ObjectMapper mapper = new ObjectMapper();
+                try{
+                    fileData = mapper.readValue(buf.toString(), new TypeReference<HashMap<String, String>>() {});
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+                return fileData;
+
+
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            return new HashMap<String, String >();
+        });
+        try {
+            return completableFuture.get();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return new HashMap<String,String>();
+
     }
 
     public static Boolean uploadFile(HashMap<String, String> fileData) {
