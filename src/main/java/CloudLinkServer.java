@@ -1,6 +1,7 @@
 import com.microsoft.signalr.HubConnection;
 import com.microsoft.signalr.HubConnectionBuilder;
 import utils.FileCrawler;
+import utils.GlobalValues;
 import utils.HTTPClient;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.List;
 public class CloudLinkServer {
     static HubConnection hubConnection;
     static String url = "https://cloudlinkmessage.azurewebsites.net/api";
+
     public static void main(String[] args) {
 //        FileCrawler fileCrawler = new FileCrawler("/Users/sandrarolfe/Documents/servertest");
 //        List<HashMap<String,String>> filesEmpty = new ArrayList<>();
@@ -31,22 +33,31 @@ public class CloudLinkServer {
 //            System.out.println(file.get("date-edited"));
 //            System.out.println(file.get("online"));
 //        }
-/*
-        Connect to communications hub
+
+        //Connect to communications hub
         hubConnection = HubConnectionBuilder.create(url).build();
         hubConnection.start();
-        */
+        hubConnection.on("file-req", (message) -> {
+            String uuid = message;
+            for (HashMap<String, String> fileData : GlobalValues.FileMap) {
+                if (fileData.get("_id").equals(uuid)) {
+                    HTTPClient.uploadFile(fileData);
+                }
+            }
+
+        }, String.class);
+        hubConnection.on("new-file", (message) -> {
+            String uuid = message;
+            HashMap<String, String> fileData = HTTPClient.getFileData(uuid);
+            HTTPClient.downloadFile(fileData);
+
+        }, String.class);
+
         //HTTPClient.uploadFileData(files.get(1));
         //HTTPClient.deleteFileData("28727e4e-cbe8-4bbc-ab3d-da90d440baaf");
 //        System.out.println("using blob storage");
 //        HTTPClient.uploadFile(files.get(1));
 //        HTTPClient.downloadFile(files.get(1));
-        HashMap<String, String> test = HTTPClient.getFileData("0923e361-1555-40ee-9407-cfa420708e00");
-        for(String value : test.values()){
-            System.out.println(value);
-        }
-        for(String key: test.keySet()){
-            System.out.println(key);
-        }
+//
     }
 }
