@@ -22,7 +22,7 @@ public class JSONWriter {
 
 
         }
-        try (FileWriter file = new FileWriter("files.json")){
+        try (FileWriter file = new FileWriter(GlobalValues.basePath +"/files.json")){
             file.write(fileList.toJSONString());
             file.flush();
         }catch (IOException e){

@@ -1,8 +1,6 @@
 import com.microsoft.signalr.HubConnection;
 import com.microsoft.signalr.HubConnectionBuilder;
-import utils.FileCrawler;
-import utils.GlobalValues;
-import utils.HTTPClient;
+import utils.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,14 +25,17 @@ public class CloudLinkServer {
 //        testEntry2.put("path","/Users/sandrarolfe/Documents/servertest/test2/.DS_Store");
 //        filesEmpty.add(testEntry2);
 //        List<HashMap<String,String>> files = fileCrawler.crawl(filesEmpty);
-//        for(HashMap<String,String> file : files){
-//            System.out.println(file.get("_id"));
-//            System.out.println(file.get("path"));
-//            System.out.println(file.get("date-edited"));
-//            System.out.println(file.get("online"));
-//        }
+        List<HashMap<String,String>> files = JSONReader.read();
+        for(HashMap<String,String> file : files){
+            System.out.println(file.get("_id"));
+            System.out.println(file.get("path"));
+            System.out.println(file.get("date-edited"));
+            System.out.println(file.get("online"));
+        }
+        JSONWriter.write(files);
 
         //Connect to communications hub
+        /*
         hubConnection = HubConnectionBuilder.create(url).build();
         hubConnection.start();
         hubConnection.on("file-req", (message) -> {
@@ -52,6 +53,7 @@ public class CloudLinkServer {
             HTTPClient.downloadFile(fileData);
 
         }, String.class);
+        */
 
         //HTTPClient.uploadFileData(files.get(1));
         //HTTPClient.deleteFileData("28727e4e-cbe8-4bbc-ab3d-da90d440baaf");

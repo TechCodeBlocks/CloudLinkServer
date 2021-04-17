@@ -12,10 +12,10 @@ import java.util.HashMap;
 import java.util.List;
 
 public class JSONReader {
-    List<HashMap<String, String>> readFilesData = new ArrayList<HashMap<String, String>>();
-    public List<HashMap<String,String>> read(){
+    private static List<HashMap<String, String>> readFilesData = new ArrayList<HashMap<String, String>>();
+    public static List<HashMap<String,String>> read(){
         JSONParser jsonParser = new JSONParser();
-        try(FileReader reader = new FileReader("files.json")){
+        try(FileReader reader = new FileReader(GlobalValues.basePath + "/files.json")){
             Object obj = jsonParser.parse(reader);
             JSONArray fileList = (JSONArray) obj;
             fileList.forEach(filedata -> parseFileData((JSONObject) filedata));
@@ -27,7 +27,7 @@ public class JSONReader {
         return readFilesData;
     }
 
-    private void parseFileData(JSONObject fileData){
+    private static void parseFileData(JSONObject fileData){
         HashMap<String, String> fileDataMap = new HashMap<String, String>();
         fileDataMap.put("_id", (String) fileData.get("_id"));
         fileDataMap.put("path", (String) fileData.get("path"));
