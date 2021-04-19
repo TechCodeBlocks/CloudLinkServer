@@ -16,23 +16,26 @@ public class CloudLinkServer {
     static String url = "https://cloudlinkmessage.azurewebsites.net/api";
 
     public static void main(String[] args) {
-//        FileCrawler fileCrawler = new FileCrawler("/Users/sandrarolfe/Documents/servertest");
-//        List<HashMap<String,String>> filesEmpty = new ArrayList<>();
+        FileCrawler fileCrawler = new FileCrawler("/Users/sandrarolfe/Documents/servertest");
+        List<HashMap<String,String>> filesEmpty = new ArrayList<>();
 //        HashMap<String,String> testEntry1 = new HashMap<>();
 //        testEntry1.put("path","/Users/sandrarolfe/Documents/servertest/Test1.rtf");
 //        filesEmpty.add(testEntry1);
 //        HashMap<String,String> testEntry2 = new HashMap<>();
 //        testEntry2.put("path","/Users/sandrarolfe/Documents/servertest/test2/.DS_Store");
 //        filesEmpty.add(testEntry2);
-//        List<HashMap<String,String>> files = fileCrawler.crawl(filesEmpty);
-        List<HashMap<String,String>> files = JSONReader.read();
-        for(HashMap<String,String> file : files){
-            System.out.println(file.get("_id"));
-            System.out.println(file.get("path"));
-            System.out.println(file.get("date-edited"));
-            System.out.println(file.get("online"));
-        }
-        JSONWriter.write(files);
+        //List<HashMap<String,String>> newfiles = fileCrawler.crawl(filesEmpty);
+        List<HashMap<String,String>> oldfiles = JSONReader.read();
+        List<HashMap<String,String>> newfiles = fileCrawler.crawl(oldfiles);
+        //FileDataHandler.testContents(oldfiles,newfiles);
+        JSONWriter.write(newfiles);
+//        for(HashMap<String,String> file : files){
+//            System.out.println(file.get("_id"));
+//            System.out.println(file.get("path"));
+//            System.out.println(file.get("date-edited"));
+//            System.out.println(file.get("online"));
+//        }
+//        JSONWriter.write(files);
 
         //Connect to communications hub
         /*

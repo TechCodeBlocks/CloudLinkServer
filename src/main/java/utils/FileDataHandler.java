@@ -30,20 +30,26 @@ public class FileDataHandler {
     //Use to compare JSON data - from previous download and from current one.
     public static void testContents(List<HashMap<String, String>> oldList, List<HashMap<String, String>> newList){
         for(HashMap<String,String> fileItem : newList){
-            if(!oldList.contains(fileItem)){
-                if(LocalDate.parse(fileItem.get("date-edited")).isAfter(LocalDate.now().minusDays(1))){
-                    HTTPClient.uploadFileData(fileItem);
-                    //add as new item to cloud database - this method is probably better to run then just use the
-                    //new list as the up to date one.
-                }
-            }
+            System.out.println(fileItem.get("path"));
+//            if(!oldList.contains(fileItem)){
+//                if(LocalDate.parse(fileItem.get("date-edited")).isAfter(LocalDate.now().minusDays(1))){
+//                    System.out.println("new file found");
+//                    //HTTPClient.uploadFileData(fileItem);
+//                    //add as new item to cloud database - this method is probably better to run then just use the
+//                    //new list as the up to date one.
+//                }
+//            }
 
         }
-        for(HashMap<String,String> fileItem: oldList){
+        System.out.println("-----------------------");
+        for(HashMap<String,String> fileItem : oldList){
             //If the file entry is in the old list but not the new one, the file must have been deleted between lists
             //being checked. Delete the entry from the cloud database
+            System.out.println(fileItem.get("path"));
             if(!newList.contains(fileItem)){
-                HTTPClient.deleteFileData(fileItem.get("_id"));
+                //HTTPClient.deleteFileData(fileItem.get("_id"));
+                System.out.println("old file deleted.");
+                System.out.println(fileItem.get("path"));
             }
 
         }
