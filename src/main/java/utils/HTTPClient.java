@@ -17,7 +17,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-public class HTTPClient {
+public interface HTTPClient {
     //Functions needed:
     //Upload file data: json format from HashMap, post request to the correct endpoint
     //Delete file data: send request with the id of the file to delete as a paramater called _id

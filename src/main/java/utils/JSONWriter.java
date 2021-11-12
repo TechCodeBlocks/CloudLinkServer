@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
-public class JSONWriter {
+public interface JSONWriter {
     public static void write(List<HashMap<String, String>> filesdata){
         JSONArray fileList = new JSONArray();
         for (HashMap<String, String> filedata : filesdata){

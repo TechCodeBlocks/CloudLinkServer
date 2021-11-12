@@ -11,9 +11,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class JSONReader {
-    private static List<HashMap<String, String>> readFilesData = new ArrayList<HashMap<String, String>>();
-    public static List<HashMap<String,String>> read(){
+public interface JSONReader {
+    List<HashMap<String, String>> readFilesData = new ArrayList<HashMap<String, String>>();
+    static List<HashMap<String,String>> read(){
         JSONParser jsonParser = new JSONParser();
         try(FileReader reader = new FileReader(GlobalValues.basePath + "/files.json")){
             Object obj = jsonParser.parse(reader);
@@ -27,7 +27,7 @@ public class JSONReader {
         return readFilesData;
     }
 
-    private static void parseFileData(JSONObject fileData){
+    static void parseFileData(JSONObject fileData){
         HashMap<String, String> fileDataMap = new HashMap<String, String>();
         fileDataMap.put("_id", (String) fileData.get("_id"));
         fileDataMap.put("path", (String) fileData.get("path"));
