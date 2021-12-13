@@ -35,7 +35,9 @@ public interface HTTPClient {
                 connection.setDoOutput(true);
                 //create a JSON object to represent the data
                 JSONObject body = new JSONObject();
+                int userid = Integer.parseInt(fileData.get("path").split("/")[0]);
                 body.put("_id", fileData.get("_id"));
+                body.put("_userid", GlobalValues.userid);
                 body.put("path", fileData.get("path"));
                 body.put("date-edited", fileData.get("date-edited"));
                 body.put("online", fileData.get("online"));
@@ -122,6 +124,7 @@ public interface HTTPClient {
                 connection.setRequestProperty("Accept", "application/json");
                 connection.setDoOutput(true);
                 JSONObject body = new JSONObject();
+                body.put("_userid", GlobalValues.userid);
                 body.put("_id", id);
                 DataOutputStream dataOutputStream = new DataOutputStream(connection.getOutputStream());
                 dataOutputStream.write(body.toString().getBytes());
@@ -203,6 +206,40 @@ public interface HTTPClient {
         }
         return false;
 
+    }
+    //not required in server program, will be used in http client for clients.
+    static Boolean verifyUser(int id, String passwordHash){
+        CompletableFuture<Boolean> completableFuture = CompletableFuture.supplyAsync(() ->{
+            try {
+                URL url = new URL("https://cloudlink.azurewebsites.net/api/userverify");
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+                connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+                connection.setRequestProperty("Accept", "application/json");
+                connection.setDoOutput(true);
+                JSONObject body = new JSONObject();
+                body.put("id", id);
+                body.put("pass_hash", passwordHash);
+                DataOutputStream dataOutputStream = new DataOutputStream(connection.getOutputStream());
+                dataOutputStream.write(body.toString().getBytes());
+                dataOutputStream.close();
+                connection.disconnect();
+                if (connection.getResponseCode() == 400) {
+                    System.out.println("error");
+                    return false;
+                }
+                return true;
+
+            }catch (Exception e){
+
+            }
+            return false;
+        });
+        try {
+            return completableFuture.get();
+        }catch (Exception e){
+            return false;
+        }
     }
 
 
