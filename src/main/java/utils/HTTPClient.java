@@ -22,9 +22,11 @@ public interface HTTPClient {
     //Upload file data: json format from HashMap, post request to the correct endpoint
     //Delete file data: send request with the id of the file to delete as a paramater called _id
     public static Boolean uploadFileData(HashMap<String, String> fileData) {
+        System.out.println("Upload file data: Called");
         //Async execution of code
         CompletableFuture<Boolean> completableFuture = CompletableFuture.supplyAsync(() -> {
             try {
+                System.out.println("Upload File Data: Attempting");
                 //Create URL for the correct endpoint
                 URL url = new URL("https://cloudlink.azurewebsites.net/api/addfile");
                 //open and set up connection
@@ -35,8 +37,8 @@ public interface HTTPClient {
                 connection.setDoOutput(true);
                 //create a JSON object to represent the data
                 JSONObject body = new JSONObject();
-                int userid = Integer.parseInt(fileData.get("path").split("/")[0]);
                 body.put("_id", fileData.get("_id"));
+                //In final implementation, user id will be extracted from the file path.
                 body.put("_userid", GlobalValues.userid);
                 body.put("path", fileData.get("path"));
                 body.put("date-edited", fileData.get("date-edited"));
@@ -48,6 +50,7 @@ public interface HTTPClient {
                 connection.disconnect();
                 //Check for success
                 if (connection.getResponseCode() == 200) {
+                    System.out.println("File added to cloud system");
                     return true;
                 }
 
@@ -168,6 +171,7 @@ public interface HTTPClient {
             BlobContainerClient blobContainerClient = blobServiceClient.getBlobContainerClient("ytterbium");
             BlobClient blobClient = blobContainerClient.getBlobClient(fileData.get("_id"));
             blobClient.uploadFromFile(filepath, true);
+            //send signalr message to notify client
 
 
             return true;

@@ -1,6 +1,7 @@
 package utils;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,10 +31,9 @@ public interface FileDataHandler {
     //Use to compare JSON data - from previous download and from current one.
      static void testContents(List<HashMap<String, String>> oldList, List<HashMap<String, String>> newList){
         for(HashMap<String,String> fileItem : newList){
-            System.out.println(fileItem.get("path"));
             if(!oldList.contains(fileItem)){
-                if(LocalDate.parse(fileItem.get("date-edited")).isAfter(LocalDate.now().minusDays(1))){
-                    System.out.println("new file found");
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
+                if(LocalDate.parse(fileItem.get("date-edited"), formatter).isAfter(LocalDate.now().minusDays(1))){
                     HTTPClient.uploadFileData(fileItem);
                     //add as new item to cloud database - this method is probably better to run then just use the
                     //new list as the up to date one.

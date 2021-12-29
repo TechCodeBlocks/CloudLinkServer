@@ -19,12 +19,12 @@ public class FileCrawler {
         existingFilePaths = getPathsFromList(existingFiles);
         //recursively traverse file structure and build up a list of files. if there is a new path create a
         //new file entry with a new UUID.
-        preexistingFiles = existingFiles;
+        preexistingFiles.addAll(existingFiles);
         checkIfFilesExistStill();
         List<HashMap<String,String>> newFileList = crawler(existingFilePaths, new File(baseFilePath));
         preexistingFiles.addAll(newFileList);
 
-        return existingFiles;
+        return preexistingFiles;
     }
     private List<HashMap<String,String>> crawler(List<String> knownPaths, File directory){
         File[] files = directory.listFiles();
