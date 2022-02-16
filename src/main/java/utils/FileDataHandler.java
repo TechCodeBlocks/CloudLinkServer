@@ -33,7 +33,7 @@ public interface FileDataHandler {
         for(HashMap<String,String> fileItem : newList){
             if(!oldList.contains(fileItem)){
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
-                if(LocalDate.parse(fileItem.get("date-edited"), formatter).isAfter(LocalDate.now().minusDays(1))){
+                if(LocalDate.parse(fileItem.get("date-edited"), formatter).isAfter(LocalDate.now().minusDays(5))){
                     HTTPClient.uploadFileData(fileItem);
                     //add as new item to cloud database - this method is probably better to run then just use the
                     //new list as the up to date one.

@@ -21,14 +21,15 @@ public interface HTTPClient {
     //Functions needed:
     //Upload file data: json format from HashMap, post request to the correct endpoint
     //Delete file data: send request with the id of the file to delete as a paramater called _id
-    public static Boolean uploadFileData(HashMap<String, String> fileData) {
+     static Boolean uploadFileData(HashMap<String, String> fileData) {
         System.out.println("Upload file data: Called");
         //Async execution of code
         CompletableFuture<Boolean> completableFuture = CompletableFuture.supplyAsync(() -> {
             try {
                 System.out.println("Upload File Data: Attempting");
                 //Create URL for the correct endpoint
-                URL url = new URL("https://cloudlink.azurewebsites.net/api/addfile");
+                //URL url = new URL("https://cloudlink.azurewebsites.net/api/addfile");
+                URL url = new URL("http://192.168.1.163:5000/cloudlink/addfile/");
                 //open and set up connection
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("POST");
@@ -75,9 +76,10 @@ public interface HTTPClient {
         return false;
     }
 
-    public static Boolean deleteFileData(String id) {
+     static Boolean deleteFileData(String id) {
         CompletableFuture<Boolean> completableFuture = CompletableFuture.supplyAsync(() -> {
-            String baseURL = "https://cloudlink.azurewebsites.net/api/delete-item?_id=";
+            //String baseURL = "https://cloudlink.azurewebsites.net/api/delete-item?_id=";
+            String baseURL = "http://192.168.1.163:5000/cloudlink/deletefile?id=";
             String requestURL = baseURL + id;
             try {
                 URL url = new URL(requestURL);
@@ -120,18 +122,19 @@ public interface HTTPClient {
     public static HashMap<String, String> getFileData(String id){
         CompletableFuture<HashMap<String, String>> completableFuture = CompletableFuture.supplyAsync(()->{
             try {
-                URL url = new URL("https://cloudlink.azurewebsites.net/api/get-single-file-data?");
+                //URL url = new URL("https://cloudlink.azurewebsites.net/api/get-single-file-data?");
+                URL url = new URL("http://192.168.1.163:5000/cloudlink/file?filedid="+id);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
                 connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
                 connection.setRequestProperty("Accept", "application/json");
                 connection.setDoOutput(true);
-                JSONObject body = new JSONObject();
-                body.put("_userid", GlobalValues.userid);
-                body.put("_id", id);
-                DataOutputStream dataOutputStream = new DataOutputStream(connection.getOutputStream());
-                dataOutputStream.write(body.toString().getBytes());
-                dataOutputStream.close();
+//                JSONObject body = new JSONObject();
+//                body.put("_userid", GlobalValues.userid);
+//                body.put("_id", id);
+//                DataOutputStream dataOutputStream = new DataOutputStream(connection.getOutputStream());
+//                dataOutputStream.write(body.toString().getBytes());
+//                dataOutputStream.close();
                 InputStream in = connection.getInputStream();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(in));
                 StringBuffer buf = new StringBuffer();

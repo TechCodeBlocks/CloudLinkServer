@@ -25,10 +25,10 @@ public class CloudLinkServer implements FileDataHandler, JSONReader, JSONWriter,
         FileDataHandler.testContents(oldFiles, newFiles);
         GlobalValues.FileMap = newFiles;
         JSONWriter.write(newFiles);
-        setupHubConnection();
-        String test1 = "ad4799d3-42c0-4bec-8aba-7e44c7c7db7c";
-        String test2 = "ad4799d3-42c0-4bec-8aba-7e44c7c7db7c";
-        System.out.println(test1.equals(test2));
+        //setupHubConnection();
+//        String test1 = "ad4799d3-42c0-4bec-8aba-7e44c7c7db7c";
+//        String test2 = "ad4799d3-42c0-4bec-8aba-7e44c7c7db7c";
+//        System.out.println(test1.equals(test2));
 
 
 
