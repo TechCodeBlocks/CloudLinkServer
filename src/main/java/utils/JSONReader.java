@@ -13,6 +13,12 @@ import java.util.List;
 
 public interface JSONReader {
     List<HashMap<String, String>> readFilesData = new ArrayList<HashMap<String, String>>();
+
+    /**
+     * @return
+     * Returns data read from the JSON file in the working format of List<HashMap<String,String>>.
+     * Reads and parses text as JSON.
+     */
     static List<HashMap<String,String>> read(){
         JSONParser jsonParser = new JSONParser();
         try(FileReader reader = new FileReader(GlobalValues.basePath + "/files.json")){

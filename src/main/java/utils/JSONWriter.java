@@ -9,7 +9,13 @@ import java.util.HashMap;
 import java.util.List;
 
 public interface JSONWriter {
-    public static void write(List<HashMap<String, String>> filesdata){
+
+    /**
+     * @param filesdata
+     * Takes a list of HashMaps which constitutes all requisite file data and stores it in the JSON format, writing this to a file.
+     * Provides data persistence.
+     */
+    static void write(List<HashMap<String, String>> filesdata){
         JSONArray fileList = new JSONArray();
         for (HashMap<String, String> filedata : filesdata){
             JSONObject fileDetails = new JSONObject();

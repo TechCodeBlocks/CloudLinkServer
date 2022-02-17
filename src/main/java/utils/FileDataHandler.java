@@ -7,44 +7,26 @@ import java.util.HashMap;
 import java.util.List;
 
 public interface FileDataHandler {
-    public static List<HashMap<String, String>> mergeLists(List<HashMap<String, String>> oldList, List<HashMap<String, String>> newList){
-        List<HashMap<String, String>> mergedList = new ArrayList<HashMap<String, String>>();
-        //add unchanged values using original from old list
-        for (int i = 0; i < oldList.size(); i++) {
-            if(newList.contains(oldList.get(i))){
-                mergedList.add(oldList.get(i));
-            }
 
-        }
-        //add updated values to the list using download from the web server. Web server should have the always up to date version.
-        for (HashMap<String,String> fileItem :newList) {
-            if(!mergedList.contains(fileItem)){
-                mergedList.add(fileItem);
-
-            }
-
-        }
-
-        return mergedList;
-
-    }
-    //Use to compare JSON data - from previous download and from current one.
+    /**
+     * @param oldList Data read in from persistent storage.
+     * @param newList Data produced from a live index of files present.
+     * Compares the contents of the 2 lists.
+     * If a file is not in the old list but is in the new list, then it is a new file, and its data must be added to the cloud index.
+     * If a file is in the old list, but not the new one, then it is a now deleted file and its data must be removed from the cloud index.
+     */
      static void testContents(List<HashMap<String, String>> oldList, List<HashMap<String, String>> newList){
         for(HashMap<String,String> fileItem : newList){
             if(!oldList.contains(fileItem)){
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
                 if(LocalDate.parse(fileItem.get("date-edited"), formatter).isAfter(LocalDate.now().minusDays(5))){
                     HTTPClient.uploadFileData(fileItem);
-                    //add as new item to cloud database - this method is probably better to run then just use the
-                    //new list as the up to date one.
                 }
             }
 
         }
         System.out.println("-----------------------");
         for(HashMap<String,String> fileItem : oldList){
-            //If the file entry is in the old list but not the new one, the file must have been deleted between lists
-            //being checked. Delete the entry from the cloud database
             System.out.println(fileItem.get("path"));
             if(!newList.contains(fileItem)){
                 HTTPClient.deleteFileData(fileItem.get("_id"));

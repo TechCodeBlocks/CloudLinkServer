@@ -7,17 +7,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-//program needs to load a json map of file data and send it to the cloud.
-//This program map will not be changed or uploaded if no new files are detected
-//Message handling:
-//[new_file] -> use uuid provided to download file from blob - get data from cloud sync to add data to local map, get path to dl file to
-//[req_file] -> upload requested uuid to lookup then upload the file.
-//[shutdown] -> initiate shutdown procedures for the server/system
+
 
 public class CloudLinkServer implements FileDataHandler, JSONReader, JSONWriter, HTTPClient {
     static HubConnection hubConnection;
     static String url = "https://cloudlinkmessage.azurewebsites.net/api";
 
+    /**
+     * @param args
+     * Entry point for the server program.
+     * Each time the program is run, the files will be reindexed. This allows the program to be used in conjunction with
+     * direct local access to the server.
+     * Once read in, the up to date list of files is written to the index file.
+     */
     public static void main(String[] args) {
         FileCrawler fileCrawler = new FileCrawler(GlobalValues.basePath);
         List<HashMap<String,String>> oldFiles = JSONReader.read();
@@ -26,20 +28,24 @@ public class CloudLinkServer implements FileDataHandler, JSONReader, JSONWriter,
         GlobalValues.FileMap = newFiles;
         JSONWriter.write(newFiles);
         //setupHubConnection();
-//        String test1 = "ad4799d3-42c0-4bec-8aba-7e44c7c7db7c";
-//        String test2 = "ad4799d3-42c0-4bec-8aba-7e44c7c7db7c";
-//        System.out.println(test1.equals(test2));
+
 
 
 
     }
 
+    /**
+     * Establish a connection to the SignalR Hub.
+     * Set up the way in which message packets are handled by implementing the equivalent of a listener.
+     * 'file-req' will trigger the upload of a file to Azure blob.
+     * 'new file' will result in the download of a file using the attached UUID.
+     * Also provisions for remotely shutting down the server using a shell command.
+     */
     private static void setupHubConnection() {
         hubConnection = HubConnectionBuilder.create(url).build();
         hubConnection.start();
         //change message reveived systems to all use same target 'newMessage'. Message itself will be formatted:
         // instruction::data
-        //hubConnection.send("file-req", "ad4799d3-42c0-4bec-8aba-7e44c7c7db7c");
         /*
          * 'newMessage' routing has been implemented. The previous method did not work as expected so this change had to
          * be made. Web Socket requests are now send using a custom packet format of 'opcode::operand'.

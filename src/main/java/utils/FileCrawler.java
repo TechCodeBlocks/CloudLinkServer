@@ -15,10 +15,12 @@ public class FileCrawler {
         this.baseFilePath = baseFilePath;
     }
 
+    /**
+     * @param existingFiles List of files that already are known to the system - prevents UUID/Path conflicts
+     * @return List of HashMaps that constitute a complete list of files data.
+     */
     public List<HashMap<String,String>> crawl(List<HashMap<String,String>> existingFiles){
         existingFilePaths = getPathsFromList(existingFiles);
-        //recursively traverse file structure and build up a list of files. if there is a new path create a
-        //new file entry with a new UUID.
         preexistingFiles.addAll(existingFiles);
         checkIfFilesExistStill();
         List<HashMap<String,String>> newFileList = crawler(existingFilePaths, new File(baseFilePath));
@@ -26,6 +28,13 @@ public class FileCrawler {
 
         return preexistingFiles;
     }
+
+    /**
+     * @param knownPaths List of known paths (to avoid conflict)
+     * @param directory Current directory that is to be crawled.
+     * @return List of new files found in the directory
+     * Recursively indexes the file tree.
+     */
     private List<HashMap<String,String>> crawler(List<String> knownPaths, File directory){
         File[] files = directory.listFiles();
         List<HashMap<String,String>> newFileList = new ArrayList<>();
@@ -56,7 +65,10 @@ public class FileCrawler {
     }
 
 
-
+    /**
+     * @param existingFiles Full file data
+     * @return Abstracted file data, only containing paths as this is all that is required by the crawler.
+     */
     private List<String> getPathsFromList(List<HashMap<String, String>> existingFiles) {
         List<String> paths = new ArrayList<String>();
         for (HashMap<String, String> fileData: existingFiles
@@ -68,6 +80,9 @@ public class FileCrawler {
         return paths;
     }
 
+    /**
+     * Removes files that don't exist anymore from the list of indexed files.
+     */
     private void checkIfFilesExistStill(){
         List<HashMap<String, String>> filesToRemove = new ArrayList<HashMap<String, String>>();
         for(HashMap<String,String> filesData : preexistingFiles){
